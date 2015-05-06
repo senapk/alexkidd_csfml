@@ -30,3 +30,8 @@
 
 # Debug files
 *.dSYM/
+
+# user files
+build-*
+*.pro.user
+*.autosave
