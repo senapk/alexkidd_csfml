@@ -1,5 +1,5 @@
-#ifndef PROF_H
-#define PROF_H
+#ifndef ALUNO_H
+#define ALUNO_H
 #include <SFML/Graphics.h>
 
 struct _Obj{
@@ -43,4 +43,4 @@ void limitar_alex(Obj *obj, Limites lim);
 void iniciar_inimigo(sfKeyCode tecla, Enemy * inimigo, Limites lim);
 void seguir(Obj * enemy, Obj * alex);
 void testar_colisao(Obj * alex, Tiro * tiro, Enemy * enemy, int * acabou);
-#endif // PROF_H
+#endif // ALUNO_H
