@@ -14,8 +14,6 @@
  */
 void update(Obj *alex)
 {
-    alex->x = alex->x + alex->vx/10.0;
-    alex->y = alex->y + alex->vy/10.0;
 }
 
 /*
@@ -30,19 +28,6 @@ void update(Obj *alex)
  */
 void andar(Obj *alex)
 {
-    const int vmax = 8;
-    if(sfKeyboard_isKeyPressed(sfKeyD))
-    {
-        if(alex->vx <= vmax)
-            alex->vx += 1;
-        alex->face = '>';
-    }
-    if(sfKeyboard_isKeyPressed(sfKeyA))
-    {
-        if(alex->vx >= -vmax)
-            alex->vx -= 1;
-        alex->face = '<';
-    }
 }
 
 //se alex nao estiver tocando no chao, ou seja,
@@ -53,8 +38,6 @@ void andar(Obj *alex)
 
 void gravidade(Obj *alex, int chao)
 {
-    if(alex->y < chao -2)
-        alex->vy = alex->vy + 1;
 }
 
 /* Se alex tentar atravessar o chao, ou seja,
@@ -68,11 +51,6 @@ void gravidade(Obj *alex, int chao)
  */
 void colidir(Obj *alex, int chao)
 {
-    if(alex->y >= chao)
-    {
-        alex->y = chao - 1;
-        alex->vy = 0;
-    }
 }
 
 //se alex estiver tocando o chao, ou seja,
@@ -88,9 +66,6 @@ void colidir(Obj *alex, int chao)
 //o chão ele poderá pular no ar
 void pular(sfKeyCode tecla, Obj *alex, int chao)
 {
-    if(tecla == sfKeyW)
-       if((int)alex->y == chao -1)
-            alex->vy =-10;
 }
 
 
@@ -114,26 +89,6 @@ void pular(sfKeyCode tecla, Obj *alex, int chao)
 
 void atirar(sfKeyCode tecla, Obj *alex, Tiro *tiro)
 {
-    if(tiro->existe == 1)
-        return;
-    if(tecla == sfKeyJ)
-    {
-        if(alex->face == '<')
-        {
-            tiro->obj.vx = -5;
-            tiro->obj.face = '{';
-        }
-       if(alex->face == '>')
-        {
-            tiro->obj.vx = 5;
-            tiro->obj.face = '}';
-        }
-        tiro->obj.x = alex->x;
-        tiro->obj.y = alex->y;
-        tiro->obj.vy = alex->vy;
-
-        tiro->existe = 1;
-    }
 }
 
 
@@ -146,22 +101,6 @@ void atirar(sfKeyCode tecla, Obj *alex, Tiro *tiro)
 
 void atrito(Obj *alex, int chao)
 {
-    int neg = 0;
-    if(alex->vx < 0){
-        neg = 1;
-        alex->vx *= -1;
-    }
-
-    if(alex->y >= chao -2)
-    {
-        if(alex->vx < 1.0)
-            alex->vx = 0;
-        else
-            alex->vx *= 0.9;
-    }
-    if(neg)
-        alex->vx *= -1;
-
 }
 
 
@@ -174,9 +113,6 @@ void atrito(Obj *alex, int chao)
 
 int fora_dos_limites(Obj obj, Limites rect)
 {
-    if((obj.x >= rect.direita) || (obj.x <= rect.esquerda) ||
-      (obj.y <= rect.superior)|| (obj.y >= rect.inferior))
-        return 1;
     return 0;
 }
 
@@ -189,8 +125,6 @@ int fora_dos_limites(Obj obj, Limites rect)
  */
 void verificar_tiro_saiu(Tiro *tiro, Limites tela)
 {
-    if(fora_dos_limites(tiro->obj, tela))
-            tiro->existe = 0;
 }
 
 /*
@@ -204,14 +138,6 @@ void verificar_tiro_saiu(Tiro *tiro, Limites tela)
 */
 void limitar_alex(Obj *obj, Limites lim)
 {
-    if(obj->x > (lim.direita - 1)){
-        obj->x = lim.direita -1;
-        obj->vx *= -1;
-    }
-    if(obj->x < (lim.esquerda + 1)){
-        obj->x = lim.esquerda + 1;
-        obj->vx *= -1;
-    }
 }
 
 //se a tecla for 'i' sfKeyI, inicie aleatoriamente o inimigo
@@ -224,15 +150,6 @@ void limitar_alex(Obj *obj, Limites lim)
 //Após essa função, se o jogador clicar na tecla I, vai aparecer
 //um fantasma que não se mexe.
 void iniciar_inimigo(sfKeyCode tecla, Enemy * inimigo, Limites lim){
-    if(tecla == sfKeyI){
-        inimigo->obj.x = rand() % (lim.direita - lim.esquerda) + lim.esquerda;
-        inimigo->obj.y = rand() % (lim.inferior - lim.superior) + lim.superior;
-        inimigo->obj.vy = 0;
-        inimigo->obj.vx = 0;
-        inimigo->obj.face = '@';
-        inimigo->is_ativo = 1;
-        inimigo->vidas = 9;
-    }
 }
 
 //faca o inimigo seguir alex
@@ -243,15 +160,6 @@ void iniciar_inimigo(sfKeyCode tecla, Enemy * inimigo, Limites lim){
 //Após essa função o fantasminha estará perseguindo o Alex.
 void seguir(Obj * enemy, Obj * alex)
 {
-    int vmax = 3;
-    if(enemy->x > alex->x)
-        enemy->vx = -vmax;
-    else
-        enemy->vx = vmax;
-    if(enemy->y > alex->y)
-        enemy->vy = -vmax;
-    else
-        enemy->vy = vmax;
 }
 
 //retorna 1 se os objetos A e B estão em colisão.
@@ -262,9 +170,6 @@ void seguir(Obj * enemy, Obj * alex)
 //colidiram
 //ou de forma mal feita só ver se a parte inteira dos x e y são iguais
 int colidiu(Obj * A, Obj * B){
-    float dist = sqrt((B->x - A->x)*(B->x - A->x) + (B->y - A->y)*(B->y - A->y));
-    if(dist < 1.0)
-        return 1;
     return 0;
 }
 
@@ -281,22 +186,6 @@ int colidiu(Obj * A, Obj * B){
 //fantasma perde uma vida. Se o fantasma chegar em vida negativa, o
 //jogo acaba e o jogador ganha.
 void testar_colisao(Obj * alex, Tiro * tiro, Enemy * enemy, int * acabou){
-    if(enemy->is_ativo){
-        if(colidiu(alex, &enemy->obj)){
-            *acabou = 1;
-            return;
-        }
-        if(tiro->existe)
-            if(colidiu(&tiro->obj, &enemy->obj)){
-                enemy->vidas--;
-                tiro->existe = 0;
-                if(enemy->vidas == -1){
-                    *acabou = 2;
-                    return;
-                }
-
-            }
-    }
 }
 
 
