@@ -28,6 +28,13 @@ void update(Obj *alex)
  */
 void andar(Obj *alex)
 {
+    const int vmax = 8;
+    /*if(sfKeyboard_isKeyPressed(sfKeyD))*/
+    /*{*/
+    /*}*/
+    /*if(sfKeyboard_isKeyPressed(sfKeyA))*/
+    /*{    */
+    /*}*/
 }
 
 //se alex nao estiver tocando no chao, ou seja,
@@ -66,6 +73,7 @@ void colidir(Obj *alex, int chao)
 //o chão ele poderá pular no ar
 void pular(sfKeyCode tecla, Obj *alex, int chao)
 {
+    //if(tecla == sfKeyW)
 }
 
 
@@ -150,6 +158,7 @@ void limitar_alex(Obj *obj, Limites lim)
 //Após essa função, se o jogador clicar na tecla I, vai aparecer
 //um fantasma que não se mexe.
 void iniciar_inimigo(sfKeyCode tecla, Enemy * inimigo, Limites lim){
+    //if(tecla == sfKeyI)
 }
 
 //faca o inimigo seguir alex
